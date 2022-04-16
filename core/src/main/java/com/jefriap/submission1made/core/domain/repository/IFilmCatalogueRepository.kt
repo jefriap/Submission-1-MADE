@@ -11,11 +11,15 @@ interface IFilmCatalogueRepository {
 
     fun getAllTvShows(sort: String): Flow<Resource<List<TvShowModel>>>
 
+    fun getDetailMovie(movieId: Int): Flow<Resource<MovieModel>>
+
+    fun getDetailTvShow(tvShowId: Int): Flow<Resource<TvShowModel>>
+
     fun getFavoriteMovies(sort: String): Flow<List<MovieModel>>
 
     fun getFavoritesTvShows(sort: String): Flow<List<TvShowModel>>
 
-    fun setMovieFavorite(movie: MovieModel, state: Boolean)
+    suspend fun setMovieFavorite(movie: MovieModel, state: Boolean)
 
-    fun setTvShowFavorite(tvShow: TvShowModel, state: Boolean)
+    suspend fun setTvShowFavorite(tvShow: TvShowModel, state: Boolean)
 }

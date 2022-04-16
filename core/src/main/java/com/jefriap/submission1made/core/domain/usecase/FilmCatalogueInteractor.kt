@@ -15,6 +15,14 @@ class FilmCatalogueInteractor(private val iFilmCatalogueRepository: IFilmCatalog
         return iFilmCatalogueRepository.getAllTvShows(sort)
     }
 
+    override fun getDetailMovie(movieId: Int): Flow<Resource<MovieModel>> {
+        return iFilmCatalogueRepository.getDetailMovie(movieId)
+    }
+
+    override fun getDetailTvShow(tvShowId: Int): Flow<Resource<TvShowModel>> {
+        return iFilmCatalogueRepository.getDetailTvShow(tvShowId)
+    }
+
     override fun getFavoriteMovies(sort: String): Flow<List<MovieModel>> {
         return iFilmCatalogueRepository.getFavoriteMovies(sort)
     }
@@ -23,11 +31,11 @@ class FilmCatalogueInteractor(private val iFilmCatalogueRepository: IFilmCatalog
         return iFilmCatalogueRepository.getFavoritesTvShows(sort)
     }
 
-    override fun setMovieFavorite(movie: MovieModel, state: Boolean) {
+    override suspend fun setMovieFavorite(movie: MovieModel, state: Boolean) {
         return iFilmCatalogueRepository.setMovieFavorite(movie, state)
     }
 
-    override fun setTvShowFavorite(tvShow: TvShowModel, state: Boolean) {
+    override suspend fun setTvShowFavorite(tvShow: TvShowModel, state: Boolean) {
         return iFilmCatalogueRepository.setTvShowFavorite(tvShow, state)
     }
 }

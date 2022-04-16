@@ -5,8 +5,8 @@ data class MovieModel(
     var title: String,
     var overview: String,
     var rating: Double,
-    var poster: String,
-    var backdrop: String,
+    var poster: String? = null,
+    var backdrop: String? = null,
     var releaseDate: String,
     var favorite: Boolean = false,
 )

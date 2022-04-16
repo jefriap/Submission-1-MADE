@@ -44,7 +44,7 @@ val networkModule = module {
             }else {
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
             }
-        val client = OkHttpClient.Builder()
+        OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val request = chain.request()
                 val builder = request
@@ -57,10 +57,13 @@ val networkModule = module {
             .connectTimeout(120, TimeUnit.SECONDS)
             .readTimeout(120, TimeUnit.SECONDS)
             .build()
+    }
+
+    single {
         val retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
+            .client(get())
             .build()
         retrofit.create(ApiService::class.java)
     }

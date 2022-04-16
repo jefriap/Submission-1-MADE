@@ -6,7 +6,7 @@ data class TvShowModel(
     var overview: String,
     var rating: Double,
     var releaseDate: String,
-    var poster: String,
-    var backdrop: String,
+    var poster: String? = null,
+    var backdrop: String? = null,
     var favorite: Boolean = false,
 )

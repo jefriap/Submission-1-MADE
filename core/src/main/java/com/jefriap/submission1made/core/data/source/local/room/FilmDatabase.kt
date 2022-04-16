@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.submission.filmcatalogue.data.local.entity.MovieEntity
 import com.submission.filmcatalogue.data.local.entity.TvShowEntity
 
-@Database(entities = [MovieEntity::class, TvShowEntity::class], version = 1, exportSchema = false)
+@Database(entities = [MovieEntity::class, TvShowEntity::class], version = 2, exportSchema = false)
 abstract class FilmDatabase : RoomDatabase() {
     abstract fun filmDao(): FilmDao
 }
