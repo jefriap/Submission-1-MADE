@@ -19,4 +19,6 @@
     <string name="favorite">Favorite</string>
     <string name="back_button">Back Button</string>
     <string name="title_favorite">Favorite</string>
+    <string name="blm_tersedia">Blm Tersedia</string>
+    <string name="terjadi_kesalahan">Terjadi kesalahan</string>
 </resources>

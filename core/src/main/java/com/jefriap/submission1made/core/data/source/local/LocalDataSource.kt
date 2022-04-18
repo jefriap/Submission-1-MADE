@@ -9,12 +9,12 @@ import kotlinx.coroutines.flow.Flow
 class LocalDataSource(private val mFilmDao: FilmDao) {
 
     fun getAllMovies(sort: String): Flow<List<MovieEntity>> {
-        val query = SortUtils.getSortedQueryFavoriteMovies(sort)
+        val query = SortUtils.getSortedQueryMovies(sort)
         return mFilmDao.getMovies(query)
     }
 
     fun getAllTvShows(sort: String): Flow<List<TvShowEntity>> {
-        val query = SortUtils.getSortedQueryFavoriteMovies(sort)
+        val query = SortUtils.getSortedQueryTvShows(sort)
         return mFilmDao.getTvShows(query)
     }
 
@@ -28,16 +28,20 @@ class LocalDataSource(private val mFilmDao: FilmDao) {
          return mFilmDao.getFavoriteTvShows(query)
     }
 
+    fun getDetailMovie(movieId: Int) = mFilmDao.getDetailMovie(movieId)
+
+    fun getDetailTvShow(tvShowId: Int) = mFilmDao.getDetailTvShow(tvShowId)
+
     suspend fun insertMovies(movies: List<MovieEntity>) = mFilmDao.insertMovie(movies)
 
     suspend fun insertTvShows(tvShows: List<TvShowEntity>) = mFilmDao.insertTvShow(tvShows)
 
-    fun setMovieFavorite(movie: MovieEntity, newState: Boolean) {
+    suspend fun setMovieFavorite(movie: MovieEntity, newState: Boolean) {
         movie.favorite = newState
         mFilmDao.updateMovieFavorite(movie)
     }
 
-    fun setTvShowFavorite(tvShow: TvShowEntity, newState: Boolean) {
+    suspend fun setTvShowFavorite(tvShow: TvShowEntity, newState: Boolean) {
         tvShow.favorite = newState
         mFilmDao.updateTvShowFavorite(tvShow)
     }

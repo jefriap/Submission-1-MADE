@@ -25,10 +25,10 @@ data class TvShowEntity(
     var releaseDate: String,
 
     @ColumnInfo(name = "poster")
-    var poster: String,
+    var poster: String? = null,
 
     @ColumnInfo(name = "backdrop")
-    var backdrop: String,
+    var backdrop: String? = null,
 
     @ColumnInfo(name = "favorite")
     var favorite: Boolean = false

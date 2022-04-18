@@ -14,27 +14,27 @@ interface FilmDao {
     fun getMovies(query: SupportSQLiteQuery): Flow<List<MovieEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMovie(movie: List<MovieEntity>)
+    suspend fun insertMovie(movie: List<MovieEntity>)
 
     @RawQuery(observedEntities = [TvShowEntity::class])
     fun getTvShows(query: SupportSQLiteQuery): Flow<List<TvShowEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTvShow(tvShow: List<TvShowEntity>)
+    suspend fun insertTvShow(tvShow: List<TvShowEntity>)
 
     @Transaction
     @Query("SELECT * FROM movieentity WHERE movieId = :movieId")
-    fun getDetailMovie(movieId: Int): LiveData<MovieEntity>
+    fun getDetailMovie(movieId: Int): Flow<MovieEntity>
 
     @Transaction
     @Query("SELECT * FROM tvshowentity WHERE tvShowId = :tvShowId")
-    fun getDetailTvShow(tvShowId: Int): LiveData<TvShowEntity>
+    fun getDetailTvShow(tvShowId: Int): Flow<TvShowEntity>
 
     @Update
-    fun updateMovieFavorite(movie: MovieEntity)
+    suspend fun updateMovieFavorite(movie: MovieEntity)
 
     @Update
-    fun updateTvShowFavorite(tvShow: TvShowEntity)
+    suspend fun updateTvShowFavorite(tvShow: TvShowEntity)
 
     @RawQuery(observedEntities = [MovieEntity::class])
     fun getFavoriteMovies(query: SupportSQLiteQuery): Flow<List<MovieEntity>>
