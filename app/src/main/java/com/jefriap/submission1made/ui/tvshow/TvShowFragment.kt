@@ -1,9 +1,11 @@
 package com.jefriap.submission1made.ui.tvshow
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -12,8 +14,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.jefriap.submission1made.R
 import com.jefriap.submission1made.core.data.Resource
 import com.jefriap.submission1made.core.domain.model.TvShowModel
+import com.jefriap.submission1made.core.ui.tvshow.TvShowRvAdapter
 import com.jefriap.submission1made.core.utils.SortUtils
 import com.jefriap.submission1made.databinding.FragmentTvShowBinding
+import com.jefriap.submission1made.ui.detail.DetailActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TvShowFragment : Fragment() {
@@ -23,7 +27,12 @@ class TvShowFragment : Fragment() {
 
     private val viewModel: TvShowViewModel by viewModel()
 
-    private var sort = SortUtils.RANDOM
+    private lateinit var sort: String
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,8 +56,21 @@ class TvShowFragment : Fragment() {
             setHasFixedSize(true)
             this.adapter = adapter
 
+            sort = SortUtils.TITLE
             getList(sort)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            com.jefriap.submission1made.R.id.action_title -> sort = SortUtils.TITLE
+            com.jefriap.submission1made.R.id.action_rating -> sort = SortUtils.RATING
+            com.jefriap.submission1made.R.id.action_newest -> sort = SortUtils.NEWEST
+            com.jefriap.submission1made.R.id.action_random -> sort = SortUtils.RANDOM
+        }
+        getList(sort)
+        item.isChecked = true
+        return super.onOptionsItemSelected(item)
     }
 
     private fun getList(sort: String) {
@@ -79,6 +101,13 @@ class TvShowFragment : Fragment() {
     private fun adapter(list: List<TvShowModel>) {
         val adapter = TvShowRvAdapter(list, requireContext())
         _binding?.rvTvShow?.adapter = adapter
+
+        adapter.onItemClick = { tvShowId ->
+            val intent = Intent(requireActivity(), DetailActivity::class.java)
+            intent.putExtra(DetailActivity.EXTRA_ID, tvShowId)
+            intent.putExtra(DetailActivity.TYPE, "tv")
+            startActivity(intent)
+        }
     }
 
 }

@@ -19,7 +19,7 @@ object SortUtils {
                 simpleQuery.append("ORDER BY releaseDate DESC")
             }
             TITLE -> {
-                simpleQuery.append("ORDER BY title DESC")
+                simpleQuery.append("ORDER BY title ASC")
             }
             RANDOM -> {
                 simpleQuery.append("ORDER BY RANDOM()")
@@ -35,10 +35,10 @@ object SortUtils {
                 simpleQuery.append("ORDER BY rating DESC")
             }
             NEWEST -> {
-                simpleQuery.append("ORDER BY releaseDate DESC")
+                simpleQuery.append("ORDER BY release_date DESC")
             }
             TITLE -> {
-                simpleQuery.append("ORDER BY title DESC")
+                simpleQuery.append("ORDER BY name ASC")
             }
             RANDOM -> {
                 simpleQuery.append("ORDER BY RANDOM()")
@@ -58,7 +58,7 @@ object SortUtils {
                 simpleQuery.append("ORDER BY releaseDate DESC")
             }
             TITLE -> {
-                simpleQuery.append("ORDER BY title DESC")
+                simpleQuery.append("ORDER BY title ASC")
             }
             RANDOM -> {
                 simpleQuery.append("ORDER BY RANDOM()")
@@ -75,10 +75,10 @@ object SortUtils {
                 simpleQuery.append("ORDER BY rating DESC")
             }
             NEWEST -> {
-                simpleQuery.append("ORDER BY releaseDate DESC")
+                simpleQuery.append("ORDER BY release_date DESC")
             }
             TITLE -> {
-                simpleQuery.append("ORDER BY title DESC")
+                simpleQuery.append("ORDER BY name ASC")
             }
             RANDOM -> {
                 simpleQuery.append("ORDER BY RANDOM()")

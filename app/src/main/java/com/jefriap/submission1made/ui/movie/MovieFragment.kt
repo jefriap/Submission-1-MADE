@@ -1,9 +1,11 @@
 package com.jefriap.submission1made.ui.movie
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -12,8 +14,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.jefriap.submission1made.R
 import com.jefriap.submission1made.core.data.Resource
 import com.jefriap.submission1made.core.domain.model.MovieModel
+import com.jefriap.submission1made.core.ui.movie.MovieRvAdapter
 import com.jefriap.submission1made.core.utils.SortUtils
 import com.jefriap.submission1made.databinding.FragmentMovieBinding
+import com.jefriap.submission1made.ui.detail.DetailActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MovieFragment : Fragment() {
@@ -23,7 +27,12 @@ class MovieFragment : Fragment() {
 
     private val viewModel: MovieViewModel by viewModel()
 
-    private var sort = SortUtils.RANDOM
+    private lateinit var sort: String
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,8 +56,21 @@ class MovieFragment : Fragment() {
             setHasFixedSize(true)
             this.adapter = adapter
 
+            sort = SortUtils.TITLE
             getList(sort)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_title -> sort = SortUtils.TITLE
+            R.id.action_rating -> sort = SortUtils.RATING
+            R.id.action_newest -> sort = SortUtils.NEWEST
+            R.id.action_random -> sort = SortUtils.RANDOM
+        }
+        getList(sort)
+        item.isChecked = true
+        return super.onOptionsItemSelected(item)
     }
 
     private fun getList(sort: String) {
@@ -76,8 +98,16 @@ class MovieFragment : Fragment() {
     }
 
     private fun adapter(list: List<MovieModel>) {
-        val adapter = MovieRvAdapter(list, requireContext())
+        val adapter = MovieRvAdapter(requireContext())
+        adapter.setData(list)
         _binding?.rvMovies?.adapter = adapter
+
+        adapter.onItemClick = { movieId ->
+            val intent = Intent(requireActivity(), DetailActivity::class.java)
+            intent.putExtra(DetailActivity.EXTRA_ID, movieId)
+            intent.putExtra(DetailActivity.TYPE, "movie")
+            startActivity(intent)
+        }
     }
 
 }

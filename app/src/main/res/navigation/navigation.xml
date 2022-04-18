@@ -14,5 +14,11 @@
         android:name="com.jefriap.submission1made.ui.tvshow.TvShowFragment"
         android:label="Tv Show Catalogue"
         tools:layout="@layout/fragment_tv_show"/>
+    <fragment
+        android:id="@+id/navigation_favorite"
+        android:name="com.jefriap.submission1made.favorite.FavoriteFragment"
+        app:moduleName="Submission_1_MADE.favorite"
+        android:label="Favorite"
+        tools:layout="@layout/fragment_favorite" />
 
 </navigation>

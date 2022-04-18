@@ -34,7 +34,7 @@ ext {
     lottie_version = "4.2.2"
 
     //Navigation
-    navigation_version = "2.3.2"
+    navigation_version = "2.4.2"
 
     //Lifecycle
     lifecycle_version = "2.2.0"

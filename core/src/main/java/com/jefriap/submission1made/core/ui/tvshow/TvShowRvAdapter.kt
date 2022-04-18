@@ -1,21 +1,19 @@
-package com.jefriap.submission1made.ui.tvshow
+package com.jefriap.submission1made.core.ui.tvshow
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.jefriap.submission1made.BuildConfig
-import com.jefriap.submission1made.R
+import com.jefriap.submission1made.core.BuildConfig
+import com.jefriap.submission1made.core.R
+import com.jefriap.submission1made.core.databinding.ItemRowBinding
 import com.jefriap.submission1made.core.domain.model.TvShowModel
-import com.jefriap.submission1made.databinding.ItemRowBinding
-import com.jefriap.submission1made.ui.detail.DetailActivity
-import com.jefriap.submission1made.utils.imageLoad
-import com.jefriap.submission1made.utils.loadImage
-import com.submission.filmcatalogue.data.local.entity.TvShowEntity
+import com.jefriap.submission1made.core.utils.imageLoad
+import com.jefriap.submission1made.core.utils.loadImage
 
 class TvShowRvAdapter(private val dataTvShows: List<TvShowModel>, private val context: Context) : RecyclerView.Adapter<TvShowRvAdapter.ListViewHolder>() {
+
+    var onItemClick: ((Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val binding = ItemRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -44,19 +42,18 @@ class TvShowRvAdapter(private val dataTvShows: List<TvShowModel>, private val co
                     tvRating.textSize = 9f
                     tvRating.text = context.getString(R.string.blm_tersedia)
                 } else tvRating.text = rating.toString()
-                //when item clicked
-                holder.itemView.setOnClickListener {
-                    val intent = Intent(holder.itemView.context, DetailActivity::class.java).apply {
-                        putExtra(DetailActivity.EXTRA_ID, tvShowId)
-                        putExtra(DetailActivity.TYPE, "tv")
-                    }
-                    holder.itemView.context.startActivity(intent)
-                }
             }
         }
     }
 
     override fun getItemCount(): Int = dataTvShows.size
 
-    class ListViewHolder(val binding: ItemRowBinding): RecyclerView.ViewHolder(binding.root)
+    inner class ListViewHolder(val binding: ItemRowBinding): RecyclerView.ViewHolder(binding.root) {
+        //when item clicked
+        init {
+            binding.root.setOnClickListener {
+                onItemClick?.invoke(dataTvShows[adapterPosition].tvShowId)
+            }
+        }
+    }
 }
