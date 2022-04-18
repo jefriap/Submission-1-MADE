@@ -1,33 +1,38 @@
 package com.jefriap.submission1made.favorite.movie
 
+import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
+import com.jefriap.submission1made.core.data.Resource
+import com.jefriap.submission1made.core.domain.model.MovieModel
+import com.jefriap.submission1made.core.ui.movie.MovieRvAdapter
+import com.jefriap.submission1made.core.utils.SortUtils
+import com.jefriap.submission1made.favorite.FavoriteViewModel
 import com.jefriap.submission1made.favorite.R
+import com.jefriap.submission1made.favorite.databinding.FragmentFavoriteMoviesBinding
+import com.jefriap.submission1made.ui.detail.DetailActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FavoriteMoviesFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FavoriteMoviesFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private var _binding: FragmentFavoriteMoviesBinding? = null
+    private val binding get() = _binding
+
+    private val viewModel: FavoriteViewModel by viewModel()
+
+    private lateinit var sort: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -35,26 +40,71 @@ class FavoriteMoviesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorite_movies, container, false)
+        _binding = FragmentFavoriteMoviesBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FavoriteMoviesFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FavoriteMoviesFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val currentOrientation = resources.configuration.orientation
+
+        _binding?.rvFavMovies?.apply {
+            layoutManager = if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+                GridLayoutManager(context, 4)
+            } else {
+                GridLayoutManager(context, 2)
             }
+            setHasFixedSize(true)
+            this.adapter = adapter
+
+            sort = SortUtils.TITLE
+            getList(sort)
+
+        }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            com.jefriap.submission1made.R.id.action_title -> sort = SortUtils.TITLE
+            com.jefriap.submission1made.R.id.action_rating -> sort = SortUtils.RATING
+            com.jefriap.submission1made.R.id.action_newest -> sort = SortUtils.NEWEST
+            com.jefriap.submission1made.R.id.action_random -> sort = SortUtils.RANDOM
+        }
+        getList(sort)
+        item.isChecked = true
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun getList(sort: String) {
+        binding?.loading?.visibility = View.VISIBLE
+        viewModel.getFavoriteMovies(sort).observe(viewLifecycleOwner) { movie ->
+            if (!movie.isNullOrEmpty()) {
+                Log.i("DATA_MOVIE_FAVORITE", "Data: $movie")
+                binding?.loading?.visibility = View.GONE
+                binding?.rvFavMovies?.visibility = View.VISIBLE
+                binding?.lottieNoData?.visibility = View.GONE
+                adapter(movie)
+            } else {
+                Log.v("DATA_MOVIE_FAVORITE", "Data: $movie")
+                binding?.loading?.visibility = View.GONE
+                binding?.rvFavMovies?.visibility = View.GONE
+                binding?.lottieNoData?.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun adapter(list: List<MovieModel>) {
+        val adapter = MovieRvAdapter(requireContext())
+        adapter.setData(list)
+        _binding?.rvFavMovies?.adapter = adapter
+
+        adapter.onItemClick = { movieId ->
+            val intent = Intent(requireActivity(), DetailActivity::class.java)
+            intent.putExtra(DetailActivity.EXTRA_ID, movieId)
+            intent.putExtra(DetailActivity.TYPE, "movie")
+            startActivity(intent)
+        }
+    }
+
 }

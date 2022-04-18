@@ -21,4 +21,8 @@
     <string name="title_favorite">Favorite</string>
     <string name="blm_tersedia">Blm Tersedia</string>
     <string name="terjadi_kesalahan">Terjadi kesalahan</string>
+    <string name="random">Random</string>
+    <string name="terbaru">Terbaru</string>
+    <string name="judul">Judul</string>
+    <string name="rating">Rating</string>
 </resources>

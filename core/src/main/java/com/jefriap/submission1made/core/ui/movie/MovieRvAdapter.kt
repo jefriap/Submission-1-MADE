@@ -1,21 +1,34 @@
-package com.jefriap.submission1made.ui.movie
+package com.jefriap.submission1made.core.ui.movie
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.jefriap.submission1made.BuildConfig
-import com.jefriap.submission1made.R
+import com.jefriap.submission1made.core.BuildConfig
+import com.jefriap.submission1made.core.R
+import com.jefriap.submission1made.core.databinding.ItemRowBinding
 import com.jefriap.submission1made.core.domain.model.MovieModel
-import com.jefriap.submission1made.databinding.ItemRowBinding
-import com.jefriap.submission1made.ui.detail.DetailActivity
-import com.jefriap.submission1made.utils.imageLoad
-import com.jefriap.submission1made.utils.loadImage
-import com.submission.filmcatalogue.data.local.entity.MovieEntity
+import com.jefriap.submission1made.core.utils.DiffUtils
+import com.jefriap.submission1made.core.utils.imageLoad
+import com.jefriap.submission1made.core.utils.loadImage
+import java.util.ArrayList
 
-class MovieRvAdapter(private val dataMovies: List<MovieModel>, private val context: Context) : RecyclerView.Adapter<MovieRvAdapter.ListViewHolder>() {
+class MovieRvAdapter(private val context: Context) :
+    RecyclerView.Adapter<MovieRvAdapter.ListViewHolder>() {
+
+    var onItemClick: ((Int) -> Unit)? = null
+
+    private var listData = ArrayList<MovieModel>()
+
+    fun setData(newListData: List<MovieModel>?) {
+        if (newListData == null) return
+        val diffUtilCallback = DiffUtils(listData, newListData)
+        val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
+        listData.clear()
+        listData.addAll(newListData)
+        diffResult.dispatchUpdatesTo(this)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val binding = ItemRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -23,7 +36,7 @@ class MovieRvAdapter(private val dataMovies: List<MovieModel>, private val conte
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val data = dataMovies[position]
+        val data = listData[position]
         with(holder.binding) {
             with(data) {
                 //image
@@ -44,20 +57,20 @@ class MovieRvAdapter(private val dataMovies: List<MovieModel>, private val conte
                     tvRating.textSize = 9f
                     tvRating.text = context.getString(R.string.blm_tersedia)
                 } else tvRating.text = rating.toString()
-                //when item clicked
-                holder.itemView.setOnClickListener {
-                    val intent = Intent(holder.itemView.context, DetailActivity::class.java).apply {
-                        putExtra(DetailActivity.EXTRA_ID, movieId)
-                        putExtra(DetailActivity.TYPE, "movie")
-                    }
-                    holder.itemView.context.startActivity(intent)
-                }
             }
         }
     }
 
-    override fun getItemCount(): Int = dataMovies.size
+    override fun getItemCount(): Int = listData.size
 
-    class ListViewHolder(val binding: ItemRowBinding): RecyclerView.ViewHolder(binding.root)
+    inner class ListViewHolder(val binding: ItemRowBinding): RecyclerView.ViewHolder(binding.root) {
+        //when item clicked
+        init {
+            binding.root.setOnClickListener {
+                onItemClick?.invoke(listData[adapterPosition].movieId)
+            }
+        }
+
+    }
 
 }

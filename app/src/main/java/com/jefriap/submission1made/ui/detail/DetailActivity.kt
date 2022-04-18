@@ -1,11 +1,11 @@
 package com.jefriap.submission1made.ui.detail
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.jefriap.submission1made.BuildConfig
 import com.jefriap.submission1made.R

@@ -16,28 +16,7 @@ class DiffUtils(private val oldList: List<MovieModel>, private val newList: List
     }
 
     override fun areContentsTheSame(oldPosition: Int, newPosition: Int): Boolean {
-        val (title,
-            overview,
-            rating,
-            releaseDate,
-            poster,
-            backdrop,
-            favorite) = oldList[oldPosition]
-        val (title1,
-            overview1,
-            rating1,
-            releaseDate1,
-            poster1,
-            backdrop1,
-            favorite1) = newList[newPosition]
-
-        return title == title1
-                && overview == overview1
-                && rating == rating1
-                && releaseDate == releaseDate1
-                && poster == poster1
-                && backdrop == backdrop1
-                && favorite == favorite1
+        return oldList[oldPosition] == newList[newPosition]
     }
 
     @Nullable
