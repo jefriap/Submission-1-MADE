@@ -24,7 +24,8 @@ import java.util.concurrent.TimeUnit
 * BASE_URL
 * in file local.properties
  */
-const val baseUrl = BuildConfig.BASE_URL
+//const val baseUrl = BuildConfig.BASE_URL
+const val baseUrl = "https://api.themoviedb.org/3/"
 
 val databaseModule = module {
     factory { get<FilmDatabase>().filmDao() }

@@ -37,12 +37,16 @@ class DetailActivity : AppCompatActivity() {
 
         viewModel.setSelectedItem(itemId)
 
-        if (typeData == "movie") {
-            movieObserve()
-        } else if (typeData == "tv") {
-            tvShowObserve()
-        } else {
-            Log.e("DETAIL_ACTIVITY", "Error: Observe not found")
+        when (typeData) {
+            "movie" -> {
+                movieObserve()
+            }
+            "tv" -> {
+                tvShowObserve()
+            }
+            else -> {
+                Log.e("DETAIL_ACTIVITY", "Error: Observe not found")
+            }
         }
 
     }
@@ -111,8 +115,8 @@ class DetailActivity : AppCompatActivity() {
 
     private fun bindDetailMovie(data: MovieModel) {
         with(binding) {
-            imgMovie.loadImage(BuildConfig.IMAGE_URL + data.poster)
-            imgBackdrop.loadImage(BuildConfig.IMAGE_URL + data.backdrop)
+            imgMovie.loadImage("https://image.tmdb.org/t/p/w500/" + data.poster)
+            imgBackdrop.loadImage("https://image.tmdb.org/t/p/w500/" + data.backdrop)
             tvJudul.text = data.title
 //            tvDurasi.text = data.runtime
             tvRilis.text = data.releaseDate
@@ -126,8 +130,8 @@ class DetailActivity : AppCompatActivity() {
 
     private fun bindDetailTvShow(data: TvShowModel) {
         with(binding) {
-            imgMovie.loadImage(BuildConfig.IMAGE_URL + data.poster)
-            imgBackdrop.loadImage(BuildConfig.IMAGE_URL + data.backdrop)
+            imgMovie.loadImage("https://image.tmdb.org/t/p/w500/" + data.poster)
+            imgBackdrop.loadImage("https://image.tmdb.org/t/p/w500/" + data.backdrop)
             tvJudul.text = data.name
 //            tvDurasi.text = data.runtime
             tvRilis.text = data.releaseDate

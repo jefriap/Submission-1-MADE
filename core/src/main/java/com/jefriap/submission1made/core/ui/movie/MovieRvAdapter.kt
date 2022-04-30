@@ -42,7 +42,7 @@ class MovieRvAdapter(private val context: Context) :
                 //image
                 if (poster.isNullOrEmpty()) {
                     imgMovie.imageLoad(R.drawable.img_not_found)
-                } else imgMovie.loadImage(BuildConfig.IMAGE_URL + poster)
+                } else imgMovie.loadImage("https://image.tmdb.org/t/p/w500/$poster")
                 //title
                 tvJudulFilm.text = title
                 //genre

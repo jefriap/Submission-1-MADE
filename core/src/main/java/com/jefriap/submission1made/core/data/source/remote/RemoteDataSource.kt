@@ -16,7 +16,8 @@ class RemoteDataSource(private val apiService: ApiService) {
     * API_KEY
     * in file local.properties
      */
-    val apiKey = BuildConfig.API_KEY
+//    val apiKey = BuildConfig.API_KEY
+    val apiKey = "674a2084807534d0b078cf3d1eb9cbbe"
 
     suspend fun getMovies(): Flow<ApiResponse<List<MovieItemResponse>>> {
         return flow {
